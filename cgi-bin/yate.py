@@ -43,4 +43,19 @@ def header(header_text, header_level=2):
            '</h' + str(header_level) + '>')
 
 def para(para_text):
-    return('<p>' + para_text + '</p>') 
+    return('<p>' + para_text + '</p>')
+
+def creat_inputs(inputs_list):
+    html_inputs = ''
+    for each_input in inputs_list:
+        html_inputs += '<input type="Text" name="' + each_input \
+        + '"size=40>'
+    return(html_inputs)
+
+def do_form(name, the_inputs, method='POST', text='Submit'):
+    with open('templates/form.html') as formf:
+        form_text = formf.read()
+    inputs = creat_inputs(the_inputs)
+    form = Template(form_text)
+    return(form.substitute(cgi_name=name, http_method=method,\
+                           list_of_inputs=inputs, submit_text=text))
