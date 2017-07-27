@@ -1,30 +1,27 @@
-import os
 import cgi
-import time
-import sys
+import sqlite3
 import yate
 
+import cgitb
+cgitb.enable()
 # 纯文本发回给等待的web浏览器
 print(yate.start_response('text/plain'))
 
-# 查询3个环境变量
-addr = os.environ['REMOTE_ADDR']
-host = os.environ['REMOTE_HOST']
-method = os.environ['REQUEST_METHOD']
-
-# 返回24个字符的字符串，当前时间
-cur_time = time.asctime(time.localtime())
-
-# 在标准错误输出上显示查询的数据
-print(host + ', ' + addr + ', ' + cur_time + ': ' + method + ': ', \
-      end='', file=sys.stderr)
-
 # 将页面输入的数据转换为一个字典
-form = cgi.FieldStorage()
+form_data = cgi.FieldStorage()
 
-for each_form_item in form.keys():
-    print(each_form_item + '->' + form[each_form_item].value, \
-          end='', file=sys.stderr)
-    
-print(file=sys.stderr)
+the_name = form_data['athlete_name'].value
+the_time = form_data['TimeValue'].value
+
+connection = sqlite3.connect('coachdata.sqlite')
+
+cursor = connection.cursor()
+cursor.execute("""SELECT id FROM athletes WHERE name=?""", (the_name,))
+the_id = cursor.fetchone()[0]
+
+cursor.execute("""INSERT INTO timing_data (athlete_id, value) VALUES (?, ?)""",\
+               (the_id, the_time))
+connection.commit()
+connection.close()
+
 print('OK.')

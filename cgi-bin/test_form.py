@@ -1,6 +1,11 @@
+import yate
+import athletemodel
+import cgi
+
 import cgitb
 cgitb.enable()
-import yate
 
-print(yate.start_response("text/html"))
-print(yate.do_form('add_timing_data.py', ['TimeValue'], text='Send'))
+print(yate.start_response('text/html'))
+print(yate.do_form('add_timing_data.py', ['athlete_name'], \
+                   ['TimeValue'], text='Send'))
+

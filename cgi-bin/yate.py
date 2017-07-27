@@ -27,9 +27,13 @@ def end_form(submit_msg="Submit"):
     return('<p></p><input type=submit value="' + submit_msg + '"></form>')
 
 def radio_button(rb_name, rb_value):
-    return('<input type="radio" name="' + rb_name +
-                             '" value="' + rb_value + '"> '
+    return('<input type="radio" name="' + rb_name + \
+                             '" value="' + rb_value + '"> ' \
            + rb_value + '<br />')
+
+def radio_button_id(rb_name, rb_value, rb_id):
+    return('<input type="radio" name="' + rb_name + \
+           '"value="' + str(rb_id) + '">' + rb_value + '<br />')
 
 def u_list(items):
     u_string = '<ul>'
@@ -52,10 +56,12 @@ def creat_inputs(inputs_list):
         + '"size=40>'
     return(html_inputs)
 
-def do_form(name, the_inputs, method='POST', text='Submit'):
+def do_form(name, ath_inputs, data_inputs, method='POST', text='Submit'):
     with open('templates/form.html') as formf:
         form_text = formf.read()
-    inputs = creat_inputs(the_inputs)
+    inputs = creat_inputs(data_inputs)
+    a_inputs = creat_inputs(ath_inputs)
     form = Template(form_text)
-    return(form.substitute(cgi_name=name, http_method=method,\
+    return(form.substitute(cgi_name=name, http_method=method, \
+                           list_inputs=a_inputs, \
                            list_of_inputs=inputs, submit_text=text))
