@@ -2,8 +2,6 @@ import cgi
 import sqlite3
 import yate
 
-import cgitb
-cgitb.enable()
 # 纯文本发回给等待的web浏览器
 print(yate.start_response('text/plain'))
 
