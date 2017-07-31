@@ -1,6 +1,7 @@
-import sqlite3
+import pymysql
 
-connection = sqlite3.connect('coachdata.sqlite')
+connection = pymysql.connect(host='localhost', port=3306, user='root', \
+                             password='root', db='test', charset='utf8')
 cursor = connection.cursor()
 
 import glob

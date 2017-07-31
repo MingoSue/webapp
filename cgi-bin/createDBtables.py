@@ -1,16 +1,14 @@
-import sqlite3
+import pymysql
 
-connection = sqlite3.connect('coachdata.sqlite')
+connection = pymysql.connect(host="localhost",port=3306,user="root", \
+                             passwd="root",db="test",charset="utf8")
 cursor = connection.cursor()
-
-cursor.execute("""CREATE TABLE athletes (
-               id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-               name TEXT NOT NULL,
-               dob DATE NOT NULL )""")
+cursor.execute('DROP TABLE IF EXISTS timing_data')
 cursor.execute("""CREATE TABLE timing_data (
+               id int primary key auto_increment not null,
                athlete_id INTEGER NOT NULL,
                value TEXT NOT NULL,
-               FOREIGN KEY (athlete_id) REFERENCES athletes)""")
+               FOREIGN KEY (athlete_id) REFERENCES athletes(id))""")
 
 connection.commit()
 connection.close()

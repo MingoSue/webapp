@@ -1,9 +1,10 @@
-import sqlite3
+import pymysql
 
-db = 'coachdata.sqlite'
+db = 'test'
 
 def get_names_from_store():
-    connection = sqlite3.connect(db)
+    connection = pymysql.connect(host="localhost",port=3306,user="root", \
+                             passwd="root",db="test",charset="utf8")
     cursor = connection.cursor()
     results = cursor.execute("""SELECT name FROM athletes""")
     response = [row[0] for row in results.fetchall()]
@@ -11,25 +12,25 @@ def get_names_from_store():
     return(response)
 
 def get_namesID_from_store():
-    connection = sqlite3.connect(db)
+    connection = pymysql.connect(host="localhost",port=3306,user="root", \
+                             passwd="root",db="test",charset="utf8")
     cursor = connection.cursor()
-    results = cursor.execute("""SELECT name, id FROM athletes""")
-    response = results.fetchall()
+    cursor.execute("""SELECT name, id FROM athletes""")
+    response = cursor.fetchall()
     connection.close()
     return(response)
 
 def get_athlete_from_id(athlete_id):
-    connection = sqlite3.connect(db)
+    connection = pymysql.connect(host="localhost",port=3306,user="root", \
+                             passwd="root",db="test",charset="utf8")
     cursor = connection.cursor()
 
-    results = cursor.execute("""SELECT name, dob FROM athletes WHERE id=?""",
-                             (athlete_id))
-    (name, dob) = results.fetchone()
+    cursor.execute("""SELECT name, dob FROM athletes WHERE id=%s""",(athlete_id))
+    (name, dob) = cursor.fetchone()
 
-    results = cursor.execute("""SELECT value FROM timing_data WHERE athlete_id=
-                             ?""", (athlete_id))
+    cursor.execute("""SELECT value FROM timing_data WHERE athlete_id=%s""",(athlete_id))
 
-    data = [row[0] for row in results.fetchall()]
+    data = [row[0] for row in cursor.fetchall()]
 
     response = {'Name': name,
                 'DOB': dob,
